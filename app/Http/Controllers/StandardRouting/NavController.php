@@ -30,13 +30,23 @@ class NavController extends Controller
     public function worklogs(Request $request){
 
         $page = $request->page;
-        $data = Worklog::pagedView($page);
+        if (!$request->q){
+            $data = Worklog::pagedView($page);
+        }
+        else {
+            $data = Worklog::searchAllFieldsPagedView($page,$request->q);
+        }
+
         $workLogFractal = new WorklogFractal($data);
         $someWorkLogsView = $workLogFractal->build();
         $count = Worklog::countViewElements();
         $page = $page ? $page : 1;
         $hasNext = $page * Worklog::PAGED_VIEW_ELEMENTS < $count;
-        return view('worklogs',['data'=>$someWorkLogsView,'page'=>$page,'hasNext'=>$hasNext]);
+        $data = ['data'=>$someWorkLogsView,'page'=>$page,'hasNext'=>$hasNext];
+        if ($request->q){
+            $data['q']=$request->q;
+        }
+        return view('worklogs',$data);
 
     }
 
@@ -69,6 +79,31 @@ class NavController extends Controller
         return redirect()->to('/worklogs');
     }
 
+
+    public function editWorklog(Request $request){
+
+        $worklogId = $request->worklog_id;
+        $worklog = Worklog::byId($worklogId);
+        $ums = UnitaMisura::all();
+        $esercizi = Esercizio::all();
+        return view('insert-worklog',['worklog' => $worklog, 'measure_units'=>$ums,'exercises'=>$esercizi]);
+    }
+
+
+    public function performEditWorklog(Request $request){
+         Worklog::updateById(
+            $request->worklog_id,
+            [
+                'data_worklog'=> $request->data_worklog,
+                'esercizio_id'=> $request->esercizio,
+                'serie'=> $request->serie,
+                'ripetizioni'=> $request->ripetizioni,
+                'unita_misura'=> $request->ums == 'NESSUNO SPECIFICATO'? null : $request->ums,
+                'sforzo'=>$request->sforzo
+            ]
+        );
+        return redirect()->to('/worklogs');
+    }
 
 
 }

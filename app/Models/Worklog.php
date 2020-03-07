@@ -28,6 +28,10 @@ class Worklog extends \Illuminate\Database\Eloquent\Model
         return $this->hasOne(UnitaMisura::class, 'id','unita_misura');
     }
 
+    public static function byId($id){
+        return Worklog::with(['esercizio','unitaMisura'])->where('id',$id)->first();
+    }
+
     public static function pagedView($page = 1){
         $pagedData =  Worklog::with(['esercizio','unitaMisura'])->orderBy('data_worklog','desc')->
             paginate(15,['*'],'page',$page);
@@ -43,6 +47,22 @@ class Worklog extends \Illuminate\Database\Eloquent\Model
         Worklog::where('id','=',$worklogId)->delete();
 
     }
+
+    public static function searchAllFieldsPagedView($page,$queryItem){
+
+        $pagedData =  Worklog::with(['esercizio','unitaMisura'])->where([['data_worklog','like','%'.$queryItem.'%']])->orderBy('data_worklog','desc')->
+        paginate(15,['*'],'page',$page);
+
+        return $pagedData;
+        
+    }
+
+    public static function updateById($id,array $attributes){
+        Worklog::where('id',$id)->update(
+          $attributes
+        );
+    }
+    
 
 
 }

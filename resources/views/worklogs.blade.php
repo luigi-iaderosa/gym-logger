@@ -12,20 +12,33 @@
     <button class="btn btn-info insert-record">INSERT RECORD!</button>
     <br>
     @if($page>1)
-        <a href="{{url('worklogs?page='.($page-1))}}" style="float: left"> PREV PAGE </a>
+        @if(isset($q))
+            <a href="{{url('worklogs?page='.($page-1).'&q='.$q)}}" style="float: left"> PREV PAGE </a>
+        @else
+            <a href="{{url('worklogs?page='.($page-1))}}" style="float: left"> PREV PAGE </a>
+        @endif
     @endif
     @if($hasNext)
         <!-- elementi di paginazione -->
-        <a href="{{url('worklogs?page='.($page+1))}}" style="float: right"> NEXT PAGE </a>
-    @else()
+        @if(isset($q))
+            <a href="{{url('worklogs?page='.($page+1).'&q='.$q)}}" style="float: right"> NEXT PAGE </a>
+        @else
+            <a href="{{url('worklogs?page='.($page+1))}}" style="float: right"> NEXT PAGE </a>
+        @endif
     @endif
     @include('worklog_view',['data'=>$data,'editable'=>true])
     @if($page>1)
-        <a href="{{url('worklogs?page='.($page-1))}}" style="float: left"> PREV PAGE </a>
+        @if(isset($q))
+            <a href="{{url('worklogs?page='.($page-1).'&q='.$q)}}" style="float: left"> PREV PAGE </a>
+        @else
+            <a href="{{url('worklogs?page='.($page-1))}}" style="float: left"> PREV PAGE </a>
+        @endif
     @endif
     @if($hasNext)
-        <!-- elementi di paginazione -->
-        <a href="{{url('worklogs?page='.($page+1))}}" style="float: right"> NEXT PAGE </a>
-    @else()
+        @if(isset($q))
+            <a href="{{url('worklogs?page='.($page+1).'&q='.$q)}}" style="float: right"> NEXT PAGE </a>
+        @else
+            <a href="{{url('worklogs?page='.($page+1))}}" style="float: right"> NEXT PAGE </a>
+        @endif
     @endif
 @stop

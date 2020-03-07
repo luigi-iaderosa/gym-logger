@@ -17,4 +17,8 @@ $( document ).ready(function() {
         event.preventDefault();
         window.location.pathname = 'insert-worklog';
     })
+  $('.worklog-edit-button').click(function (event) {
+    event.preventDefault();
+    window.location.href = 'edit-worklog/?worklog_id='+this.dataset.worklogid;
+  })
 });

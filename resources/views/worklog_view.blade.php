@@ -37,7 +37,7 @@
                 <td>{{$d->valore_assoluto}}</td>
                 @if(isset($editable))
                     <td><button type="button" class="btn btn-danger worklog-view-button" data-worklogId="{{$d->id}}">CANCELLA </button></td>
-                    <td><button type="button" class="btn btn-warning worklog-view-button" data-worklogId="{{$d->id}}">MODIFICA</button></td>
+                    <td><button type="button" class="btn btn-warning worklog-edit-button" data-worklogId="{{$d->id}}">MODIFICA</button></td>
                 @endif
             </tr>
         @endforeach
