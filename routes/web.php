@@ -23,3 +23,4 @@ Route::post('insert-worklog','StandardRouting\NavController@performInsertWorklog
 Route::post('delete-worklog','StandardRouting\NavController@performDeleteWorklog');
 Route::get('edit-worklog','StandardRouting\NavController@editWorklog');
 Route::post('edit-worklog','StandardRouting\NavController@performEditWorklog');
+Route::get('redis-send-email','StandardRouting\RedisEmailController@sendMail');
