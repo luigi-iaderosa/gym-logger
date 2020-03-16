@@ -260,7 +260,15 @@ return [
         [
             'text'       => 'Worklogs',
             'icon_color' => 'red',
-            'url'=>'worklogs'
+            'submenu'=>[  [
+                'text'=> 'All Worklogs',
+                'icon_color' => 'aqua',
+                'url'=>'worklogs'],
+                ['text'=>'Query worklogs',
+                    'icon_color' => 'aqua',
+                    'url'=>'query-worklogs'
+                ]
+            ]
         ],
     ],
 
@@ -343,7 +351,7 @@ return [
         ],
         [
             'name' => 'Select2',
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',

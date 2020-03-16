@@ -1,4 +1,9 @@
 $( document ).ready(function() {
+
+
+    $('.select2_select').select2();
+
+
     $('.worklog-view-button').click(function (event) {
         var csrfToken = $('input[name$="_token"]').val()
         request = $.ajax({
