@@ -82,3 +82,17 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 Questa web app sfrutta più che può il pacchetto laravel 
 ``` Laravel AdminLTE```
 cui guida e repositoru si trovano [a questo indirizzo](https://github.com/jeroennoten/Laravel-AdminLTE)
+
+
+### NOTA:
+VIENE INTRODOTTO GRADUALMENTE IL MULTIUSER
+
+
+### View utilizzata. 
+
+```sql
+select w.id,w.user_id, w.data_worklog, w.ripetizioni,e.descrizione,w.serie,w.sforzo,u.descrizione as unita_di_misura from 
+   worklog w left join esercizio e on w.esercizio_id = e.id
+   left join unita_misura u on 
+   w.unita_misura = u.id
+```
