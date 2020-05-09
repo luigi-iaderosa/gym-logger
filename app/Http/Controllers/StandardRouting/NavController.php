@@ -12,29 +12,37 @@ namespace App\Http\Controllers\StandardRouting;
 use App\Fractals\WorklogFractal;
 use App\Http\Requests\InsertWorkLogRequest;
 use App\Http\Resources\WorklogView;
+use App\Models\Derived\Customer;
 use App\Models\Esercizio;
 use App\Models\UnitaMisura;
 use App\Models\Worklog;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+
+/**
+ * controller per il solo cliente
+ */
 class NavController extends Controller
 {
-    public function welcome(){
-        $someWorkLogs = Worklog::view(20);
+
+
+
+    public function welcome(Customer $customer){
+        $someWorkLogs = Worklog::view($customer->id,20);
         $workLogFractal = new WorklogFractal($someWorkLogs);
         $someWorkLogsView = $workLogFractal->build();
         return view('welcome',['data'=>$someWorkLogsView]);
     }
 
-    public function worklogs(Request $request){
+    public function worklogs(Request $request,Customer $customer){
 
         $page = $request->page;
         if (!$request->q){
-            $data = Worklog::pagedView($page);
+            $data = Worklog::pagedView($customer->id,$page);
         }
         else {
-            $data = Worklog::searchAllFieldsPagedView($page,$request->q);
+            $data = Worklog::searchAllFieldsPagedView($customer->id,$page,$request->q);
         }
 
         $workLogFractal = new WorklogFractal($data);
@@ -54,7 +62,7 @@ class NavController extends Controller
         return view('insert-worklog',['exercises'=>Esercizio::all(),'measure_units'=>UnitaMisura::all()]);
     }
 
-    public function performInsertWorklog(InsertWorkLogRequest $request){
+    public function performInsertWorklog(InsertWorkLogRequest $request,Customer $customer){
 
         Worklog::create(
             [
@@ -63,7 +71,8 @@ class NavController extends Controller
                 'serie'=> $request->serie,
                 'ripetizioni'=> $request->ripetizioni,
                 'unita_misura'=> $request->ums == 'NESSUNO SPECIFICATO'? null : $request->ums,
-                'sforzo'=>$request->sforzo
+                'sforzo'=>$request->sforzo,
+                'user_id'=>$customer->id
             ]
         );
 

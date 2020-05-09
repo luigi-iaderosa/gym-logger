@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Derived\Customer;
 use Illuminate\Support\ServiceProvider;
+use function request;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +15,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(Customer::class,function($app){
+            $user = request()->user();
+            return new Customer($user);
+        });
     }
 
     /**

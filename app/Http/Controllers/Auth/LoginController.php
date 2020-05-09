@@ -5,6 +5,11 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use function json_encode;
+use function redirect;
 
 class LoginController extends Controller
 {
@@ -37,4 +42,31 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    public function welcome(){
+        $user = Auth::user();
+        Log::debug(json_encode($user));
+        return view('login_view');
+    }
+
+    public function login(Request $request){
+
+        $attemptOk = Auth::attempt(['email'=>$request->email,'password'=>$request->pwd]);
+        if ($attemptOk){
+            $user = Auth::user();
+            return redirect()->to($this->redirectTo.'/'.$user->id);
+        }
+        else {
+            return redirect()->to('/')->with(['errors'=>['Uname and Pwd do not match!']]);
+        }
+    }
+
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        return redirect()->to('/');
+    }
+
+
 }

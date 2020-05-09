@@ -16,8 +16,8 @@ class Worklog extends \Illuminate\Database\Eloquent\Model
     const PAGED_VIEW_ELEMENTS = 15;
     protected $guarded = ['id'];
 
-    public static function view($take = null){
-        return Worklog::with(['esercizio','unitaMisura'])->orderBy('data_worklog','desc')->take($take)->get();
+    public static function view($user_id,$take = null){
+        return Worklog::with(['esercizio','unitaMisura'])->where('user_id',$user_id)->orderBy('data_worklog','desc')->take($take)->get();
     }
 
     public function esercizio(){
@@ -32,8 +32,8 @@ class Worklog extends \Illuminate\Database\Eloquent\Model
         return Worklog::with(['esercizio','unitaMisura'])->where('id',$id)->first();
     }
 
-    public static function pagedView($page = 1){
-        $pagedData =  Worklog::with(['esercizio','unitaMisura'])->orderBy('data_worklog','desc')->
+    public static function pagedView($user_id,$page = 1){
+        $pagedData =  Worklog::with(['esercizio','unitaMisura'])->orderBy('data_worklog','desc')->where('user_id',$user_id)->
             paginate(15,['*'],'page',$page);
         return $pagedData;
     }
@@ -48,10 +48,12 @@ class Worklog extends \Illuminate\Database\Eloquent\Model
 
     }
 
-    public static function searchAllFieldsPagedView($page,$queryItem){
+    public static function searchAllFieldsPagedView($user_id,$page,$queryItem){
 
-        $pagedData =  Worklog::with(['esercizio','unitaMisura'])->where([['data_worklog','like','%'.$queryItem.'%']])->orderBy('data_worklog','desc')->
-        paginate(15,['*'],'page',$page);
+        $pagedData =  Worklog::with(['esercizio','unitaMisura'])->
+            where([['data_worklog','like','%'.$queryItem.'%'],['user_id',$user_id]])->
+            orderBy('data_worklog','desc')->
+            paginate(15,['*'],'page',$page);
 
         return $pagedData;
         
